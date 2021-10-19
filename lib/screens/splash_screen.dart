@@ -38,8 +38,8 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.black,
       body: Center(
         child: SizedBox(
-          height: 60,
-          width: 60,
+          height: 140,
+          width: 100,
           child: Image.asset('assets/images/Netflix-Logo.jpg'),
         ),
       ),

@@ -1,11 +1,19 @@
-import 'package:anime_netflix_clone/providers/anime_api.dart';
-import 'package:anime_netflix_clone/screens/splash_screen.dart';
+import 'package:anime_netflix_clone/screens/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'package:anime_netflix_clone/screens/home_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+import 'package:anime_netflix_clone/providers/anime_api.dart';
+import 'package:anime_netflix_clone/screens/splash_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+    ],
+  );
   runApp(MyApp());
 }
 
@@ -23,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
+        routes: {
+          SearchScreen.routeName: (ctx) => SearchScreen(),
+        },
       ),
     );
   }

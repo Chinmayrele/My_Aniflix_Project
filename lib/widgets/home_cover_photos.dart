@@ -1,20 +1,15 @@
+import 'package:anime_netflix_clone/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
-import './detail_screen.dart';
-import './search_screen.dart';
 
 import '../models/anime_home_page.dart';
-import '../providers/anime_api.dart';
-import '../widgets/scroll_list.dart';
 
-class HomePage extends StatelessWidget {
-  _showSheetAnime(
-    BuildContext context,
-    AnimeHomePage animeDetails,
-    List<AnimeHomePage> anime,
-  ) {
+class HomeCoverPhoto extends StatelessWidget {
+  // const HomeCoverPhoto({ Key? key }) : super(key: key);
+  final AnimeHomePage animeDetails;
+  final List<AnimeHomePage> anime;
+  const HomeCoverPhoto(this.animeDetails, this.anime);
+
+  showSheet(BuildContext context) {
     showModalBottomSheet(
         backgroundColor: Colors.grey[900],
         shape: const RoundedRectangleBorder(
@@ -34,6 +29,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 17),
               GestureDetector(
                 onTap: () {
+                  Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => DetailScreen(animeDetails, anime)));
                 },
@@ -167,6 +163,7 @@ class HomePage extends StatelessWidget {
                     width: 155,
                     child: ElevatedButton(
                       onPressed: () {
+                        Navigator.of(context).pop();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (ctx) =>
@@ -206,13 +203,7 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (ctx) =>
-                                DetailScreen(animeDetails, anime)),
-                      );
-                    },
+                    onTap: () {},
                     child: Column(
                       children: [
                         const Icon(
@@ -245,6 +236,7 @@ class HomePage extends StatelessWidget {
                 minimum: const EdgeInsets.only(left: 20, right: 20),
                 child: GestureDetector(
                   onTap: () {
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (ctx) => DetailScreen(animeDetails, anime)));
                   },
@@ -272,270 +264,16 @@ class HomePage extends StatelessWidget {
         });
   }
 
-  Widget _textGenre(String text) {
-    return Container(
-      decoration: const BoxDecoration(boxShadow: [
-        BoxShadow(
-          blurRadius: 48,
-          color: Colors.black87,
-          offset: Offset(2, 4),
-          spreadRadius: 7,
-        ),
-      ]),
-      child: Row(
-        children: [
-          const Text(
-            '\u2022',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            text,
-            style: const TextStyle(color: Colors.white, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final animeRes = Provider.of<AnimeApi>(context, listen: false).animeHome;
-    final animeResult = Provider.of<AnimeApi>(context, listen: false);
-    animeResult.getByComedy();
-    animeResult.getByAction();
-    animeResult.getByMythology();
-    animeResult.getByAdventure();
-    animeResult.getByWar();
-    animeResult.getByDrama();
-
-    return Scaffold(
-      backgroundColor: Colors.black87,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 470,
-              child: Image.network(
-                animeRes[0].coverImage,
-                fit: BoxFit.fill,
-              ),
-            ),
-            Column(
-              children: [
-                const SizedBox(height: 15),
-                Row(
-                  children: [
-                    Container(
-                      height: 95,
-                      width: 55,
-                      margin: const EdgeInsets.only(left: 15),
-                      child: Image.asset(
-                        'assets/images/netflix_logo.png',
-                        // color: Colors.transparent,
-                        // colorBlendMode: BlendMode.dst,
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          blurRadius: 48,
-                          color: Colors.black87,
-                          offset: Offset(2, 4),
-                          spreadRadius: 7,
-                        ),
-                      ]),
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(SearchScreen.routeName);
-                          },
-                          icon: const Icon(
-                            Icons.search_outlined,
-                            size: 30,
-                            color: Colors.white,
-                          )),
-                    ),
-                    Container(
-                      height: 30,
-                      width: 30,
-                      child: Image.asset('assets/images/default_profile.jpg'),
-                      margin: const EdgeInsets.only(right: 15),
-                    ),
-                  ],
-                ),
-                Container(
-                  decoration: const BoxDecoration(boxShadow: [
-                    BoxShadow(
-                      blurRadius: 48,
-                      color: Colors.black87,
-                      offset: Offset(2, 4),
-                      spreadRadius: 7,
-                    ),
-                  ]),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Text(
-                        'TV Animes',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        'Animes',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        'My List',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 240),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _textGenre(animeRes[0].genres[0]),
-                    _textGenre(animeRes[0].genres[1]),
-                    _textGenre(animeRes[0].genres[2]),
-                    _textGenre(animeRes[0].genres[3]),
-                    _textGenre(animeRes[0].genres[4]),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 62,
-                      width: 92,
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          blurRadius: 48,
-                          color: Colors.black87,
-                          offset: Offset(2, 4),
-                          spreadRadius: 7,
-                        ),
-                      ]),
-                      child: Column(
-                        children: [
-                          IconButton(
-                              highlightColor: Colors.black,
-                              onPressed: () {
-                                animeResult.addToMyList(animeRes[0]);
-                              },
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 34,
-                              )),
-                          const Text(
-                            'My List',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _showSheetAnime(context, animeRes[0], animeRes);
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.play_arrow,
-                            color: Colors.black,
-                          ),
-                          Text('Play',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 14)),
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(primary: Colors.white),
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          blurRadius: 48,
-                          color: Colors.black87,
-                          offset: Offset(2, 4),
-                          spreadRadius: 7,
-                        ),
-                      ]),
-                      child: Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.info_outline,
-                                size: 30,
-                                color: Colors.white,
-                              )),
-                          const Text(
-                            'Info',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                ScrollList('My Anime', animeRes, animeResult.comedyHome),
-                ScrollList('Action Based', animeRes, animeResult.actionHome),
-                ScrollList('Adventure', animeRes, animeResult.adventureHome),
-                ScrollList('Drama', animeRes, animeResult.dramaHome),
-                ScrollList('Mythology', animeRes, animeResult.mythologyHome),
-                ScrollList('War Based', animeRes, animeResult.warHome),
-                const SizedBox(height: 25),
-              ],
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.black,
-        animationCurve: Curves.decelerate,
-        buttonBackgroundColor: Colors.white,
-        height: 55,
-        items: const <Widget>[
-          Icon(
-            Icons.home_filled,
-            size: 25,
-          ),
-          Icon(
-            Icons.favorite_border,
-            size: 25,
-          ),
-          Icon(
-            Icons.download_for_offline_outlined,
-            size: 25,
-          ),
-        ],
-        onTap: (index) {
-          // print(index);
-        },
+    return GestureDetector(
+      onTap: () {
+        showSheet(context);
+      },
+      child: SizedBox(
+        height: 140,
+        width: 100,
+        child: Image.network(animeDetails.coverImage),
       ),
     );
   }
