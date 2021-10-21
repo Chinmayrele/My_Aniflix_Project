@@ -1,12 +1,14 @@
 import 'package:anime_netflix_clone/models/anime_home_page.dart';
 import 'package:anime_netflix_clone/screens/detail_screen.dart';
+import 'package:anime_netflix_clone/screens/episodes_screen.dart';
 import 'package:anime_netflix_clone/widgets/more_like_this_grid.dart';
 import 'package:flutter/material.dart';
 
 class CategoryPart extends StatefulWidget {
   // const DetailScreen({ Key? key }) : super(key: key);
   final List<AnimeHomePage> anime;
-  const CategoryPart(this.anime);
+  final AnimeHomePage animeDetails;
+  const CategoryPart(this.anime, this.animeDetails);
   @override
   State<CategoryPart> createState() => _CategoryPartState();
 }
@@ -27,8 +29,8 @@ class _CategoryPartState extends State<CategoryPart> {
         ),
         const SizedBox(height: 15),
         _category == Category.episodes
-            ? Container()
-            : SingleChildScrollView(child: MoreLikeGrid(widget.anime)),
+            ? EpisodesScreen(widget.animeDetails)
+            : MoreLikeGrid(widget.anime),
       ],
     );
   }

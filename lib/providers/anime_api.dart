@@ -13,6 +13,12 @@ class AnimeApi with ChangeNotifier {
   List<AnimeHomePage> _warAnime = [];
   List<AnimeHomePage> _adventureAnime = [];
   List<AnimeHomePage> _myListAnime = [];
+  List<AnimeHomePage> _mySearchedAnime = [];
+  bool _isSearched = false;
+
+  bool get isSearchedAnime {
+    return _isSearched;
+  }
 
   List<AnimeHomePage> get animeHome {
     return (_animesHome.toList()..shuffle());
@@ -46,6 +52,10 @@ class AnimeApi with ChangeNotifier {
     return [..._myListAnime];
   }
 
+  List<AnimeHomePage> get mySearchedHome {
+    return [..._mySearchedAnime];
+  }
+
   Future<void> getAnime() async {
     final url = Uri.parse('https://api.aniapi.com/v1/anime');
     final response = await http.get(url);
@@ -66,6 +76,7 @@ class AnimeApi with ChangeNotifier {
             episodesCount: anime['episodes_count'],
             seasonPeriod: anime['season_period'],
             trailerUrl: anime['trailer_url'],
+            epiDuration: anime['episode_duration'],
           ));
         }
       } catch (e) {
@@ -139,6 +150,19 @@ class AnimeApi with ChangeNotifier {
 
   addToMyList(AnimeHomePage anime) {
     _myListAnime.add(anime);
+    notifyListeners();
+  }
+
+  searchedAnime(String name) {
+    _mySearchedAnime.clear();
+    _animesHome.forEach(
+      (element) {
+        if (element.title.toLowerCase() == name.toLowerCase()) {
+          _mySearchedAnime.add(element);
+        }
+      },
+    );
+    _isSearched = true;
     notifyListeners();
   }
 }

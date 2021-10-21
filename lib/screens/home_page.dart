@@ -350,8 +350,8 @@ class HomePage extends StatelessWidget {
                       ]),
                       child: IconButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(SearchScreen.routeName);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => SearchScreen(animeRes)));
                           },
                           icon: const Icon(
                             Icons.search_outlined,

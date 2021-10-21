@@ -31,9 +31,6 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
-        routes: {
-          SearchScreen.routeName: (ctx) => SearchScreen(),
-        },
       ),
     );
   }

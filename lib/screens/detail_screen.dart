@@ -263,7 +263,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                CategoryPart(widget.anime),
+                CategoryPart(widget.anime, widget.animeDetails),
               ],
             ),
           ),

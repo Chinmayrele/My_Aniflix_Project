@@ -10,6 +10,7 @@ class AnimeHomePage {
   final int episodesCount;
   final int seasonPeriod;
   final String trailerUrl;
+  final int epiDuration;
 
   AnimeHomePage({
     @required this.id,
@@ -21,5 +22,6 @@ class AnimeHomePage {
     @required this.episodesCount,
     @required this.seasonPeriod,
     @required this.trailerUrl,
+    @required this.epiDuration,
   });
 }
