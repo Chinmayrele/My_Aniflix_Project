@@ -1,4 +1,7 @@
+import 'package:anime_netflix_clone/models/rate_share.dart';
+import 'package:anime_netflix_clone/providers/anime_api.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../widgets/category_part.dart';
@@ -12,8 +15,8 @@ enum Category {
 class DetailScreen extends StatefulWidget {
   // const DetailScreen({ Key? key }) : super(key: key);
   final AnimeHomePage animeDetails;
-  final List<AnimeHomePage> anime;
-  const DetailScreen(this.animeDetails, this.anime);
+  // final List<AnimeHomePage> anime;
+  const DetailScreen(this.animeDetails);
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -56,6 +59,7 @@ class _DetailScreenState extends State<DetailScreen> {
               highlightColor: Colors.black,
               onPressed: () {
                 // animeResult.addToMyList(animeRes[0]);
+                share(widget.animeDetails);
               },
               icon: Icon(
                 icons,
@@ -105,6 +109,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final anime = Provider.of<AnimeApi>(context, listen: false);
+    final deviceSize = MediaQuery.of(context).size;
     return YoutubePlayerBuilder(
       player: YoutubePlayer(
         // bottomActions: const [Icon(Icons.volume_off)],
@@ -151,7 +157,8 @@ class _DetailScreenState extends State<DetailScreen> {
                 const SizedBox(height: 4),
                 widget.animeDetails.trailerUrl == null
                     ? SizedBox(
-                        height: 200,
+                        // height: 200,
+                        height: deviceSize.height * 0.251,
                         width: double.infinity,
                         child: Image.network(
                           widget.animeDetails.coverImage,
@@ -222,7 +229,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 const SizedBox(height: 16),
                 Container(
                   padding: const EdgeInsets.only(left: 12),
-                  height: 80,
+                  height: widget.animeDetails.description.isEmpty ? 40 : 80,
                   width: double.infinity,
                   child: widget.animeDetails.description.isEmpty
                       ? const Center(
@@ -263,7 +270,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                CategoryPart(widget.anime, widget.animeDetails),
+                CategoryPart(widget.animeDetails, anime.animeHome),
               ],
             ),
           ),

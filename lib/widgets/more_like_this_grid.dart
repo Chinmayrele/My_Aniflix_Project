@@ -6,7 +6,8 @@ import '../widgets/list_item.dart';
 class MoreLikeGrid extends StatelessWidget {
   // const MoreLikeGrid({ Key? key }) : super(key: key);
   final List<AnimeHomePage> anime;
-  const MoreLikeGrid(this.anime);
+  final AnimeHomePage animeDetails;
+  const MoreLikeGrid(this.animeDetails, this.anime);
 
   @override
   Widget build(BuildContext context) {

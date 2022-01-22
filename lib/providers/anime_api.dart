@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:anime_netflix_clone/models/anime_home_page.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +7,8 @@ import 'package:http/http.dart' as http;
 
 class AnimeApi with ChangeNotifier {
   List<AnimeHomePage> _animesHome = [];
-  List<AnimeHomePage> _actionAnime = [];
-  List<AnimeHomePage> _dramaAnime = [];
-  List<AnimeHomePage> _comedyAnime = [];
-  List<AnimeHomePage> _mythologyAnime = [];
-  List<AnimeHomePage> _warAnime = [];
-  List<AnimeHomePage> _adventureAnime = [];
-  List<AnimeHomePage> _myListAnime = [];
-  List<AnimeHomePage> _mySearchedAnime = [];
+  final List<AnimeHomePage> _myListAnime = [];
+  final List<AnimeHomePage> _mySearchedAnime = [];
   bool _isSearched = false;
 
   bool get isSearchedAnime {
@@ -24,30 +19,6 @@ class AnimeApi with ChangeNotifier {
     return (_animesHome.toList()..shuffle());
   }
 
-  List<AnimeHomePage> get actionHome {
-    return (_actionAnime.toList()..shuffle());
-  }
-
-  List<AnimeHomePage> get dramaHome {
-    return (_dramaAnime.toList()..shuffle());
-  }
-
-  List<AnimeHomePage> get comedyHome {
-    return (_comedyAnime.toList()..shuffle());
-  }
-
-  List<AnimeHomePage> get mythologyHome {
-    return (_mythologyAnime.toList()..shuffle());
-  }
-
-  List<AnimeHomePage> get warHome {
-    return (_warAnime.toList()..shuffle());
-  }
-
-  List<AnimeHomePage> get adventureHome {
-    return (_adventureAnime.toList()..shuffle());
-  }
-
   List<AnimeHomePage> get myListHome {
     return [..._myListAnime];
   }
@@ -56,8 +27,17 @@ class AnimeApi with ChangeNotifier {
     return [..._mySearchedAnime];
   }
 
+  clearSearchScreen() {
+    _mySearchedAnime.clear();
+  }
+
+  toggleSearch() {
+    _isSearched = false;
+  }
+
   Future<void> getAnime() async {
-    final url = Uri.parse('https://api.aniapi.com/v1/anime');
+    int page = Random().nextInt(30);
+    final url = Uri.parse('https://api.aniapi.com/v1/anime?page=${page + 1}');
     final response = await http.get(url);
     final result = (json.decode(response.body));
     List<AnimeHomePage> animes = [];
@@ -88,64 +68,15 @@ class AnimeApi with ChangeNotifier {
     } else {}
   }
 
-  List<AnimeHomePage> isComedy = [];
-  getByComedy() {
+  List<AnimeHomePage> getAnimeByGenre(String genre) {
+    List<AnimeHomePage> result = [];
+
     for (int i = 0; i < animeHome.length; i++) {
-      isComedy = _animesHome
+      result = _animesHome
           .where((element) => element.genres.contains('Comedy'))
           .toList();
     }
-    _comedyAnime = isComedy;
-  }
-
-  List<AnimeHomePage> isAction = [];
-  getByAction() {
-    for (int i = 0; i < animeHome.length; i++) {
-      isAction = _animesHome
-          .where((element) => element.genres.contains('Action'))
-          .toList();
-    }
-    _actionAnime = isAction;
-  }
-
-  List<AnimeHomePage> isDrama = [];
-  getByDrama() {
-    for (int i = 0; i < animeHome.length; i++) {
-      isDrama = _animesHome
-          .where((element) => element.genres.contains('Drama'))
-          .toList();
-    }
-    _dramaAnime = isDrama;
-  }
-
-  List<AnimeHomePage> isMythology = [];
-  getByMythology() {
-    for (int i = 0; i < animeHome.length; i++) {
-      isMythology = _animesHome
-          .where((element) => element.genres.contains('Mythology'))
-          .toList();
-    }
-    _mythologyAnime = isMythology;
-  }
-
-  List<AnimeHomePage> isWar = [];
-  getByWar() {
-    for (int i = 0; i < animeHome.length; i++) {
-      isWar = _animesHome
-          .where((element) => element.genres.contains('War'))
-          .toList();
-    }
-    _warAnime = isWar;
-  }
-
-  List<AnimeHomePage> isAdventure = [];
-  getByAdventure() {
-    for (int i = 0; i < animeHome.length; i++) {
-      isAdventure = _animesHome
-          .where((element) => element.genres.contains('Adventure'))
-          .toList();
-    }
-    _adventureAnime = isAdventure;
+    return result..shuffle();
   }
 
   addToMyList(AnimeHomePage anime) {

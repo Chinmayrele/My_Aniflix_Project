@@ -26,22 +26,25 @@ class EpisodesScreen extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.grey[850],
                   borderRadius: BorderRadius.circular(8)),
-              child: Row(
-                children: const [
-                  SizedBox(width: 10),
-                  Text(
-                    'Season 1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: const [
+                    SizedBox(width: 10),
+                    Text(
+                      'Season 1',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 23),
-                  Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.white70,
-                  )
-                ],
+                    SizedBox(width: 23),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.white70,
+                    )
+                  ],
+                ),
               ),
             ),
           ),

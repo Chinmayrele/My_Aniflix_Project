@@ -8,7 +8,7 @@ class CategoryPart extends StatefulWidget {
   // const DetailScreen({ Key? key }) : super(key: key);
   final List<AnimeHomePage> anime;
   final AnimeHomePage animeDetails;
-  const CategoryPart(this.anime, this.animeDetails);
+  const CategoryPart(this.animeDetails, this.anime);
   @override
   State<CategoryPart> createState() => _CategoryPartState();
 }
@@ -30,7 +30,7 @@ class _CategoryPartState extends State<CategoryPart> {
         const SizedBox(height: 15),
         _category == Category.episodes
             ? EpisodesScreen(widget.animeDetails)
-            : MoreLikeGrid(widget.anime),
+            : MoreLikeGrid(widget.animeDetails, widget.anime),
       ],
     );
   }

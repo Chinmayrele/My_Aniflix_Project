@@ -1,3 +1,4 @@
+import 'package:anime_netflix_clone/providers/anime_api.dart';
 import 'package:anime_netflix_clone/widgets/home_cover_photos.dart';
 import 'package:flutter/material.dart';
 import 'package:anime_netflix_clone/models/anime_home_page.dart';
@@ -6,8 +7,8 @@ class ScrollList extends StatefulWidget {
   // const HomePage({Key? key}) : super(key: key);
   final String text;
   final List<AnimeHomePage> anime;
-  final List<AnimeHomePage> isList;
-  const ScrollList(this.text, this.anime, this.isList);
+  // final List<AnimeHomePage> isList;
+  const ScrollList(this.text, this.anime);
   @override
   State<ScrollList> createState() => _ScrollListState();
 }
@@ -58,10 +59,10 @@ class _ScrollListState extends State<ScrollList> {
               if (index == _currentMax - 1) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return HomeCoverPhoto(widget.isList[index], widget.anime);
+              return HomeCoverPhoto(widget.anime[index]);
             },
-            itemCount: _currentMax > widget.isList.length
-                ? widget.isList.length
+            itemCount: _currentMax > widget.anime.length
+                ? widget.anime.length
                 : _currentMax,
             scrollDirection: Axis.horizontal,
           ),

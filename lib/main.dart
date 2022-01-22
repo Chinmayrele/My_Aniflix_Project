@@ -1,11 +1,10 @@
-import 'package:anime_netflix_clone/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:anime_netflix_clone/providers/anime_api.dart';
-import 'package:anime_netflix_clone/screens/splash_screen.dart';
+import './providers/anime_api.dart';
+import './screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

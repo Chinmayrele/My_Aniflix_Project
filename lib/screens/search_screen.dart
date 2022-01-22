@@ -1,8 +1,11 @@
 import 'package:anime_netflix_clone/models/anime_home_page.dart';
 import 'package:anime_netflix_clone/providers/anime_api.dart';
+import 'package:anime_netflix_clone/screens/detail_screen.dart';
 import 'package:anime_netflix_clone/widgets/search_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+AnimeApi myAnime;
 
 class SearchScreen extends StatefulWidget {
   // const SearchScreen({ Key? key }) : super(key: key);
@@ -17,8 +20,15 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _mySearched = TextEditingController();
 
   @override
+  void dispose() {
+    myAnime.clearSearchScreen();
+    myAnime.toggleSearch();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final myAnime = Provider.of<AnimeApi>(context);
+    myAnime = Provider.of<AnimeApi>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.black12,
       appBar: AppBar(
@@ -109,101 +119,115 @@ class _SearchScreenState extends State<SearchScreen> {
                           )
                         ],
                       )
-                    : Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          Container(
-                            height: 180,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        myAnime.mySearchedHome[0].coverImage),
-                                    fit: BoxFit.cover),
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(18),
-                                  topLeft: Radius.circular(18),
-                                )),
-                            margin: const EdgeInsets.only(left: 12, right: 12),
-                          ),
-                          // const SizedBox(height: 8),
-                          Container(
-                            height: 75,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[850],
-                                borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(16),
-                                    bottomRight: Radius.circular(16))),
-                            margin: const EdgeInsets.only(left: 12, right: 12),
-                            padding: const EdgeInsets.only(left: 12),
-                            child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      myAnime.mySearchedHome[0].title.length >
-                                              25
-                                          ? myAnime.mySearchedHome[0].title
-                                              .substring(0, 25)
-                                          : myAnime.mySearchedHome[0].title,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
-                                    ),
-                                    const Spacer(),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.play_circle_outlined,
-                                          color: Colors.white,
-                                          size: 46,
-                                        )),
-                                    const SizedBox(width: 18),
-                                  ],
-                                ),
-                                // const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      myAnime.mySearchedHome[0].seasonYear
-                                          .toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      myAnime.mySearchedHome[0].episodesCount
-                                              .toString() +
-                                          ' epi',
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      myAnime.mySearchedHome[0].seasonPeriod
-                                              .toString() +
-                                          ' Seasons',
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                    : GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (ctx) => DetailScreen(
+                                      myAnime.mySearchedHome[0],
+                                      // widget.animeDetails
+                                    )),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            Container(
+                              height: 180,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          myAnime.mySearchedHome[0].coverImage),
+                                      fit: BoxFit.cover),
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(18),
+                                    topLeft: Radius.circular(18),
+                                  )),
+                              margin:
+                                  const EdgeInsets.only(left: 12, right: 12),
                             ),
-                          ),
-                        ],
+                            // const SizedBox(height: 8),
+                            Container(
+                              height: 75,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[850],
+                                  borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(16),
+                                      bottomRight: Radius.circular(16))),
+                              margin:
+                                  const EdgeInsets.only(left: 12, right: 12),
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Column(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        myAnime.mySearchedHome[0].title.length >
+                                                25
+                                            ? myAnime.mySearchedHome[0].title
+                                                .substring(0, 25)
+                                            : myAnime.mySearchedHome[0].title,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17),
+                                      ),
+                                      const Spacer(),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            Icons.play_circle_outlined,
+                                            color: Colors.white,
+                                            size: 46,
+                                          )),
+                                      const SizedBox(width: 18),
+                                    ],
+                                  ),
+                                  // const SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        myAnime.mySearchedHome[0].seasonYear
+                                            .toString(),
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        myAnime.mySearchedHome[0].episodesCount
+                                                .toString() +
+                                            ' epi',
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        myAnime.mySearchedHome[0].seasonPeriod
+                                                .toString() +
+                                            ' Seasons',
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
