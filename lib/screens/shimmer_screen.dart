@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:anime_netflix_clone/providers/anime_api.dart';
 import 'package:anime_netflix_clone/screens/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerScreen extends StatefulWidget {
@@ -18,28 +16,11 @@ class _ShimmerScreenState extends State<ShimmerScreen> {
 
   @override
   void initState() {
-    // final animeRes = Provider.of<AnimeApi>(context, listen: false).animeHome;
-    // final animeResult = Provider.of<AnimeApi>(context, listen: false);
-    // animeResult.getByComedy();
-    // animeResult.getByAction();
-    // animeResult.getByMythology();
-    // animeResult.getByAdventure();
-    // animeResult.getByWar();
-    // animeResult.getByDrama();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final animeRes = Provider.of<AnimeApi>(context, listen: false).animeHome;
-    final animeResult = Provider.of<AnimeApi>(context, listen: false);
-    // animeResult.getByComedy();
-    // animeResult.getByAction();
-    // animeResult.getByMythology();
-    // animeResult.getByAdventure();
-    // animeResult.getByWar();
-    // animeResult.getByDrama();
-
     Timer timer = Timer(const Duration(seconds: 3), () {
       setState(() {
         isLoading = false;
@@ -48,10 +29,6 @@ class _ShimmerScreenState extends State<ShimmerScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      // body: Shimmer.fromColors(
-      //     child: ShimmerList(),
-      //     baseColor: Colors.grey,
-      //     highlightColor: Colors.grey[700]),
       body: isLoading ? ShimmerList() : HomePage(timer),
     );
   }
@@ -112,12 +89,6 @@ class ShimmerLayout extends StatelessWidget {
                 highlightColor: Colors.grey[800],
                 period: Duration(milliseconds: time),
               ),
-              // child: Container(
-              //   width: 100,
-              //   padding: const EdgeInsets.all(10),
-              //   decoration: BoxDecoration(color: Colors.grey[700]),
-              // ),
-
               const SizedBox(width: 7),
             ],
           );

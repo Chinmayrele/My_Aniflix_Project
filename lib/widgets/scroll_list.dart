@@ -1,4 +1,3 @@
-import 'package:anime_netflix_clone/providers/anime_api.dart';
 import 'package:anime_netflix_clone/widgets/home_cover_photos.dart';
 import 'package:flutter/material.dart';
 import 'package:anime_netflix_clone/models/anime_home_page.dart';
