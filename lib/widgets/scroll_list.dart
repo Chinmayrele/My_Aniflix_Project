@@ -6,7 +6,6 @@ class ScrollList extends StatefulWidget {
   // const HomePage({Key? key}) : super(key: key);
   final String text;
   final List<AnimeHomePage> anime;
-  // final List<AnimeHomePage> isList;
   const ScrollList(this.text, this.anime);
   @override
   State<ScrollList> createState() => _ScrollListState();

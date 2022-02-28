@@ -1,5 +1,4 @@
 import 'package:anime_netflix_clone/providers/anime_api.dart';
-import 'package:anime_netflix_clone/screens/home_page.dart';
 import 'package:anime_netflix_clone/screens/shimmer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

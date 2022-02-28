@@ -1,22 +1,12 @@
-import 'dart:async';
-
+import 'package:anime_netflix_clone/screens/front_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import './search_screen.dart';
-
-import '../widgets/modal_botton_sheet.dart';
 import '../providers/anime_api.dart';
 import '../widgets/scroll_list.dart';
 
 class HomePage extends StatelessWidget {
-  // List<AnimeHomePage> animeRes;
-  // AnimeApi animeResult;
-  final Timer timer;
-
-  const HomePage(this.timer);
-
   Widget _textGenre(String text) {
     return Container(
       decoration: const BoxDecoration(boxShadow: [
@@ -37,7 +27,8 @@ class HomePage extends StatelessWidget {
           ),
           Text(
             text,
-            style: const TextStyle(color: Colors.white, fontSize: 12),
+            style: const TextStyle(
+                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
           ),
         ],
       ),
@@ -47,10 +38,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final animeRes = Provider.of<AnimeApi>(context, listen: false);
-
     final deviceSize = MediaQuery.of(context).size;
-    timer.cancel();
-    // debugPrint(deviceSize.toString());
 
     return Scaffold(
       backgroundColor: Colors.black87,
@@ -77,8 +65,6 @@ class HomePage extends StatelessWidget {
                       margin: const EdgeInsets.only(left: 15),
                       child: Image.asset(
                         'assets/images/netflix_logo.png',
-                        // color: Colors.transparent,
-                        // colorBlendMode: BlendMode.dst,
                       ),
                     ),
                     const Spacer(),
@@ -94,8 +80,7 @@ class HomePage extends StatelessWidget {
                       child: IconButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) =>
-                                    SearchScreen(animeRes.animeHome)));
+                                builder: (ctx) => SearchScreen()));
                           },
                           icon: const Icon(
                             Icons.search_outlined,
@@ -150,103 +135,27 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // const SizedBox(height: 240),
                 SizedBox(height: deviceSize.height * 0.3),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _textGenre(animeRes.animeHome[0].genres[0]),
-                    _textGenre(animeRes.animeHome[0].genres[1]),
-                    _textGenre(animeRes.animeHome[0].genres[2]),
-                    _textGenre(animeRes.animeHome[0].genres[3]),
-                    _textGenre(animeRes.animeHome[0].genres[4]),
-                  ],
-                ),
+                animeRes.animeHome[0].genres.length <= 3
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _textGenre(animeRes.animeHome[0].genres[0]),
+                          _textGenre(animeRes.animeHome[0].genres[1]),
+                          _textGenre(animeRes.animeHome[0].genres[2]),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _textGenre(animeRes.animeHome[0].genres[0]),
+                          _textGenre(animeRes.animeHome[0].genres[1]),
+                          _textGenre(animeRes.animeHome[0].genres[2]),
+                          _textGenre(animeRes.animeHome[0].genres[3]),
+                        ],
+                      ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 62,
-                      width: 92,
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          blurRadius: 48,
-                          color: Colors.black87,
-                          offset: Offset(2, 4),
-                          spreadRadius: 7,
-                        ),
-                      ]),
-                      child: Column(
-                        children: [
-                          IconButton(
-                              highlightColor: Colors.black,
-                              onPressed: () {
-                                animeRes.addToMyList(animeRes.animeHome[0]);
-                              },
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 34,
-                              )),
-                          const Text(
-                            'My List',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        showSheet(context, animeRes.animeHome[0]);
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.play_arrow,
-                            color: Colors.black,
-                          ),
-                          Text('Play',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 14)),
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(primary: Colors.white),
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          blurRadius: 48,
-                          color: Colors.black87,
-                          offset: Offset(2, 4),
-                          spreadRadius: 7,
-                        ),
-                      ]),
-                      child: Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.info_outline,
-                                size: 30,
-                                color: Colors.white,
-                              )),
-                          const Text(
-                            'Info',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                FrontButtons(animeRes),
                 ScrollList('My Anime', animeRes.getAnimeByGenre('Comedy')),
                 ScrollList('Action Based', animeRes.getAnimeByGenre('Action')),
                 ScrollList('Adventure', animeRes.getAnimeByGenre('Adventure')),
@@ -258,29 +167,6 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.black,
-        animationCurve: Curves.decelerate,
-        buttonBackgroundColor: Colors.white,
-        height: 55,
-        items: const <Widget>[
-          Icon(
-            Icons.home_filled,
-            size: 25,
-          ),
-          Icon(
-            Icons.favorite_border,
-            size: 25,
-          ),
-          Icon(
-            Icons.download_for_offline_outlined,
-            size: 25,
-          ),
-        ],
-        onTap: (index) {
-          // print(index);
-        },
       ),
     );
   }

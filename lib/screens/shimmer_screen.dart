@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:anime_netflix_clone/screens/home_page.dart';
+import 'package:anime_netflix_clone/widgets/tabscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -29,7 +30,7 @@ class _ShimmerScreenState extends State<ShimmerScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: isLoading ? ShimmerList() : HomePage(timer),
+      body: isLoading ? ShimmerList() : TabScreen(timer),
     );
   }
 }
@@ -42,10 +43,11 @@ class ShimmerList extends StatelessWidget {
     final deviceSize = MediaQuery.of(context).size;
     return Column(
       children: [
+        const SizedBox(height: 120),
         Shimmer.fromColors(
             child: Container(
               width: double.infinity,
-              height: deviceSize.height * 0.55,
+              height: deviceSize.height * 0.20,
               margin: const EdgeInsets.only(top: 50, right: 10, left: 10),
               decoration: BoxDecoration(
                   color: Colors.grey[200],
@@ -53,9 +55,9 @@ class ShimmerList extends StatelessWidget {
             ),
             baseColor: Colors.grey[850],
             highlightColor: Colors.grey[800]),
-        const SizedBox(height: 30),
+        const SizedBox(height: 90),
         ShimmerLayout(),
-        const SizedBox(height: 25),
+        const SizedBox(height: 45),
         ShimmerLayout(),
       ],
     );
@@ -72,7 +74,7 @@ class ShimmerLayout extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 10),
       width: 500,
-      height: 125,
+      height: 135,
       child: ListView.builder(
         itemBuilder: (ctx, i) {
           offset += 5;
@@ -83,7 +85,9 @@ class ShimmerLayout extends StatelessWidget {
                 child: Container(
                   width: 100,
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: Colors.grey[700]),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[700],
+                      borderRadius: BorderRadius.circular(10)),
                 ),
                 baseColor: Colors.grey[850],
                 highlightColor: Colors.grey[800],

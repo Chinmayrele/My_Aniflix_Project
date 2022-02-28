@@ -12,10 +12,11 @@ enum Category {
   moreLikeThis,
 }
 
+bool flag = false;
+
 class DetailScreen extends StatefulWidget {
   // const DetailScreen({ Key? key }) : super(key: key);
   final AnimeHomePage animeDetails;
-  // final List<AnimeHomePage> anime;
   const DetailScreen(this.animeDetails);
 
   @override
@@ -58,8 +59,11 @@ class _DetailScreenState extends State<DetailScreen> {
           IconButton(
               highlightColor: Colors.black,
               onPressed: () {
+                setState(() {
+                  function();
+                });
                 // animeResult.addToMyList(animeRes[0]);
-                share(widget.animeDetails);
+                // share(widget.animeDetails);
               },
               icon: Icon(
                 icons,
@@ -111,6 +115,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     final anime = Provider.of<AnimeApi>(context, listen: false);
     final deviceSize = MediaQuery.of(context).size;
+
     return YoutubePlayerBuilder(
       player: YoutubePlayer(
         // bottomActions: const [Icon(Icons.volume_off)],
@@ -255,10 +260,44 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 Row(
                   children: [
-                    _buttonRowList(Icons.add, 'My List', () {}),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          flag = !flag;
+                          anime.addToMyList(widget.animeDetails);
+                        });
+                      },
+                      child: SizedBox(
+                        height: 60,
+                        width: 92,
+                        child: Column(
+                          children: [
+                            Icon(!flag ? Icons.add : Icons.check,
+                                color: Colors.white, size: 34),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'My List',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    // _buttonRowList(!flag ? Icons.add : Icons.check, 'My List',
+                    //     () {
+                    //   setState(() {
+                    //     flag = !flag;
+                    //     anime.addToMyList(widget.animeDetails);
+                    //   });
+                    // }),
                     _buttonRowList(
                         Icons.thumbs_up_down_outlined, 'Rate', () {}),
-                    _buttonRowList(Icons.share, 'Share', () {}),
+                    _buttonRowList(Icons.share, 'Share', () {
+                      share(widget.animeDetails);
+                    }),
                   ],
                 ),
                 const SizedBox(height: 20),

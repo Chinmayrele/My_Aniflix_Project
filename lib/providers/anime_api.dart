@@ -8,12 +8,6 @@ import 'package:http/http.dart' as http;
 class AnimeApi with ChangeNotifier {
   List<AnimeHomePage> _animesHome = [];
   final List<AnimeHomePage> _myListAnime = [];
-  final List<AnimeHomePage> _mySearchedAnime = [];
-  bool _isSearched = false;
-
-  bool get isSearchedAnime {
-    return _isSearched;
-  }
 
   List<AnimeHomePage> get animeHome {
     return (_animesHome.toList()..shuffle());
@@ -21,18 +15,6 @@ class AnimeApi with ChangeNotifier {
 
   List<AnimeHomePage> get myListHome {
     return [..._myListAnime];
-  }
-
-  List<AnimeHomePage> get mySearchedHome {
-    return [..._mySearchedAnime];
-  }
-
-  clearSearchScreen() {
-    _mySearchedAnime.clear();
-  }
-
-  toggleSearch() {
-    _isSearched = false;
   }
 
   Future<void> getAnime() async {
@@ -47,16 +29,16 @@ class AnimeApi with ChangeNotifier {
         for (int i = 0; i < result['data']['documents'].length; i++) {
           var anime = (result['data']['documents'])[i];
           animes.add(AnimeHomePage(
-            id: anime['id'],
-            coverImage: anime['cover_image'],
-            title: anime['titles']['en'],
-            genres: anime['genres'],
-            description: anime['descriptions']['en'],
-            seasonYear: anime['season_year'],
-            episodesCount: anime['episodes_count'],
-            seasonPeriod: anime['season_period'],
-            trailerUrl: anime['trailer_url'],
-            epiDuration: anime['episode_duration'],
+            id: anime['id'] ?? 0,
+            coverImage: anime['cover_image'] ?? "",
+            title: anime['titles']['en'] ?? "",
+            genres: anime['genres'] ?? [],
+            description: anime['descriptions']['en'] ?? "",
+            seasonYear: anime['season_year'] ?? 0,
+            episodesCount: anime['episodes_count'] ?? 0,
+            seasonPeriod: anime['season_period'] ?? 0,
+            trailerUrl: anime['trailer_url'] ?? "",
+            epiDuration: anime['episode_duration'] ?? 0,
           ));
         }
       } catch (e) {
@@ -73,7 +55,7 @@ class AnimeApi with ChangeNotifier {
 
     for (int i = 0; i < animeHome.length; i++) {
       result = _animesHome
-          .where((element) => element.genres.contains('Comedy'))
+          .where((element) => element.genres.contains(genre))
           .toList();
     }
     return result..shuffle();
@@ -84,16 +66,16 @@ class AnimeApi with ChangeNotifier {
     notifyListeners();
   }
 
-  searchedAnime(String name) {
-    _mySearchedAnime.clear();
-    _animesHome.forEach(
-      (element) {
-        if (element.title.toLowerCase() == name.toLowerCase()) {
-          _mySearchedAnime.add(element);
-        }
-      },
-    );
-    _isSearched = true;
-    notifyListeners();
-  }
+  // searchedAnime(String name) {
+  //   _mySearchedAnime.clear();
+  //   _animesHome.forEach(
+  //     (element) {
+  //       if (element.title.toLowerCase() == name.toLowerCase()) {
+  //         _mySearchedAnime.add(element);
+  //       }
+  //     },
+  //   );
+  //   _isSearched = true;
+  //   notifyListeners();
+  // }
 }

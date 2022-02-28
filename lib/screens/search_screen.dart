@@ -1,17 +1,15 @@
-import 'package:anime_netflix_clone/models/anime_home_page.dart';
 import 'package:anime_netflix_clone/providers/anime_api.dart';
-import 'package:anime_netflix_clone/screens/detail_screen.dart';
+import 'package:anime_netflix_clone/providers/search_provider.dart';
 import 'package:anime_netflix_clone/widgets/search_list.dart';
+import 'package:anime_netflix_clone/widgets/search_result.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-AnimeApi myAnime;
+// AnimeApi myAnime;
 
 class SearchScreen extends StatefulWidget {
-  // const SearchScreen({ Key? key }) : super(key: key);
-  final List<AnimeHomePage> animeDetails;
-  const SearchScreen(this.animeDetails);
-
+  final int appBarDecider;
+  const SearchScreen([this.appBarDecider]);
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -21,41 +19,46 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
-    myAnime.clearSearchScreen();
-    myAnime.toggleSearch();
+    _mySearched.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    myAnime = Provider.of<AnimeApi>(context, listen: false);
+    final myAnime = Provider.of<AnimeApi>(context, listen: false);
+    final searchAnime = Provider.of<SearchProvider>(context, listen: false);
     return Scaffold(
-      backgroundColor: Colors.black12,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 20,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
-        actions: [
-          Container(
-            height: 30,
-            width: 30,
-            child: Image.asset('assets/images/default_profile.jpg'),
-            margin: const EdgeInsets.only(right: 15),
-          )
-        ],
-      ),
+      backgroundColor: Colors.black,
+      appBar: widget.appBarDecider != 1
+          ? AppBar(
+              backgroundColor: Colors.black,
+              elevation: 20,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+              ),
+              actions: [
+                Container(
+                  height: 30,
+                  width: 30,
+                  child: Image.asset('assets/images/default_profile.jpg'),
+                  margin: const EdgeInsets.only(right: 15),
+                )
+              ],
+            )
+          : null,
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 5),
+            widget.appBarDecider != 1
+                ? const SizedBox(height: 5)
+                : const SizedBox(height: 60),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -85,178 +88,33 @@ class _SearchScreenState extends State<SearchScreen> {
                     suffixIcon: const Icon(Icons.mic, color: Colors.grey),
                   ),
                   onSubmitted: (val) {
-                    setState(() {
-                      myAnime.searchedAnime(_mySearched.text.trim());
-                    });
+                    // setState(() {
+
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) => SearchResult(val)));
+
+                    // });
                   }),
             ),
-            myAnime.isSearchedAnime
-                ? myAnime.mySearchedHome.isEmpty
-                    ? Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Container(
-                              height: 200,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/notFound.jpg'),
-                                      fit: BoxFit.cover),
-                                  borderRadius: BorderRadius.circular(15)),
-                              margin:
-                                  const EdgeInsets.only(left: 12, right: 12),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            '               OOPs!!! \nNo Results For The Search',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          )
-                        ],
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (ctx) => DetailScreen(
-                                      myAnime.mySearchedHome[0],
-                                      // widget.animeDetails
-                                    )),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            Container(
-                              height: 180,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          myAnime.mySearchedHome[0].coverImage),
-                                      fit: BoxFit.cover),
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(18),
-                                    topLeft: Radius.circular(18),
-                                  )),
-                              margin:
-                                  const EdgeInsets.only(left: 12, right: 12),
-                            ),
-                            // const SizedBox(height: 8),
-                            Container(
-                              height: 75,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[850],
-                                  borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(16),
-                                      bottomRight: Radius.circular(16))),
-                              margin:
-                                  const EdgeInsets.only(left: 12, right: 12),
-                              padding: const EdgeInsets.only(left: 12),
-                              child: Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        myAnime.mySearchedHome[0].title.length >
-                                                25
-                                            ? myAnime.mySearchedHome[0].title
-                                                .substring(0, 25)
-                                            : myAnime.mySearchedHome[0].title,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 17),
-                                      ),
-                                      const Spacer(),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                            Icons.play_circle_outlined,
-                                            color: Colors.white,
-                                            size: 46,
-                                          )),
-                                      const SizedBox(width: 18),
-                                    ],
-                                  ),
-                                  // const SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        myAnime.mySearchedHome[0].seasonYear
-                                            .toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        myAnime.mySearchedHome[0].episodesCount
-                                                .toString() +
-                                            ' epi',
-                                        style: const TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        myAnime.mySearchedHome[0].seasonPeriod
-                                                .toString() +
-                                            ' Seasons',
-                                        style: const TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 14),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Top Searches',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        height: 630,
-                        width: double.infinity,
-                        child: ListView.builder(
-                          itemBuilder: (ctx, index) =>
-                              SearchList(widget.animeDetails, index),
-                          itemCount: 20,
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                        ),
-                      ),
-                    ],
-                  ),
+            const SizedBox(height: 14),
+            const Padding(
+              padding: EdgeInsets.only(left: 12.0),
+              child: Text(
+                'Top Searches',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+                height: 655,
+                width: double.infinity,
+                child: SearchList(myAnime.animeHome)),
+            //   ],
+            // ),
           ],
         ),
       ),

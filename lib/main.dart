@@ -1,3 +1,4 @@
+import 'package:anime_netflix_clone/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,8 +22,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => AnimeApi(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (ctx) => AnimeApi()),
+        ChangeNotifierProvider(create: (ctx) => SearchProvider())
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
